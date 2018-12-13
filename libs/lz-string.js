@@ -8,6 +8,8 @@
 //
 // LZ-based compression algorithm, version 1.4.5
 var LZString = (function() {
+"use strict";
+
 
 // private property
 var f = String.fromCharCode;
@@ -42,7 +44,7 @@ var LZString = {
 
   decompressFromBase64 : function (input) {
     if (input == null) return "";
-    if (input == "") return null;
+    if (input === "") return null;
     return LZString._decompress(input.length, 32, function(index) { return getBaseValue(keyStrBase64, input.charAt(index)); });
   },
 
@@ -53,7 +55,7 @@ var LZString = {
 
   decompressFromUTF16: function (compressed) {
     if (compressed == null) return "";
-    if (compressed == "") return null;
+    if (compressed === "") return null;
     return LZString._decompress(compressed.length, 16384, function(index) { return compressed.charCodeAt(index) - 32; });
   },
 
@@ -99,7 +101,7 @@ var LZString = {
   //decompress from an output of compressToEncodedURIComponent
   decompressFromEncodedURIComponent:function (input) {
     if (input == null) return "";
-    if (input == "") return null;
+    if (input === "") return null;
     input = input.replace(/ /g, "+");
     return LZString._decompress(input.length, 32, function(index) { return getBaseValue(keyStrUriSafe, input.charAt(index)); });
   },
@@ -118,9 +120,9 @@ var LZString = {
         context_c="",
         context_wc="",
         context_w="",
-        context_enlargeIn= 2, // Compensate for the first entry which should not count
-        context_dictSize= 3,
-        context_numBits= 2,
+        context_enlargeIn=2, // Compensate for the first entry which should not count
+        context_dictSize=3,
+        context_numBits=2,
         context_data=[],
         context_data_val=0,
         context_data_position=0,
@@ -128,7 +130,7 @@ var LZString = {
         ii;
 
     function set_context_data(){
-       if (context_data_position == bitsPerCharM1) {
+       if (context_data_position === bitsPerCharM1) {
         context_data_position = 0;
         context_data_push(getCharFromInt(context_data_val));
         context_data_val = 0;
@@ -175,7 +177,7 @@ var LZString = {
             loop_context_data(16);
           }
           context_enlargeIn--;
-          if (context_enlargeIn == 0) {
+          if (context_enlargeIn === 0) {
             context_enlargeIn = Math_pow(2, context_numBits);
             context_numBits++;
           }
@@ -186,7 +188,7 @@ var LZString = {
 
         }
         context_enlargeIn--;
-        if (context_enlargeIn == 0) {
+        if (context_enlargeIn === 0) {
           context_enlargeIn = Math_pow(2, context_numBits);
           context_numBits++;
         }
@@ -217,7 +219,7 @@ var LZString = {
           loop_context_data(16);
         }
         context_enlargeIn--;
-        if (context_enlargeIn == 0) {
+        if (context_enlargeIn === 0) {
           context_enlargeIn = Math_pow(2, context_numBits);
           context_numBits++;
         }
@@ -227,7 +229,7 @@ var LZString = {
         loop_context_data(context_numBits);
       }
       context_enlargeIn--;
-      if (context_enlargeIn == 0) {
+      if (context_enlargeIn === 0) {
         context_enlargeIn = Math_pow(2, context_numBits);
         context_numBits++;
       }
@@ -240,7 +242,7 @@ var LZString = {
     // Flush the last char
     while (true) {
       context_data_val = (context_data_val << 1);
-      if (context_data_position == bitsPerCharM1) {
+      if (context_data_position === bitsPerCharM1) {
         context_data_push(getCharFromInt(context_data_val));
         break;
       }
@@ -251,7 +253,7 @@ var LZString = {
 
   decompress: function (compressed) {
     if (compressed == null) return "";
-    if (compressed == "") return null;
+    if (compressed === "") return null;
     return LZString._decompress(compressed.length, 32768, function(index) { return compressed.charCodeAt(index); });
   },
 
@@ -273,10 +275,10 @@ var LZString = {
 
     function iterate_power(){
       power=1;
-      while (power!=maxpower) {
+      while (power!==maxpower) {
         resb = data_val & data_position;
         data_position >>= 1;
-        if (data_position == 0) {
+        if (data_position === 0) {
           data_position = resetValue;
           data_val = getNextValue(data_index++);
         }
@@ -343,7 +345,7 @@ var LZString = {
           return result.join('');
       }
 
-      if (enlargeIn == 0) {
+      if (enlargeIn === 0) {
         enlargeIn = Math_pow(2, numBits);
         numBits++;
       }
@@ -365,7 +367,7 @@ var LZString = {
 
       w = entry;
 
-      if (enlargeIn == 0) {
+      if (enlargeIn === 0) {
         enlargeIn = Math_pow(2, numBits);
         numBits++;
       }
